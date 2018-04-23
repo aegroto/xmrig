@@ -39,7 +39,6 @@ MultiWorker<N>::MultiWorker(Handle *handle)
     m_memory = Mem::create(m_ctx, m_thread->algorithm(), N);
 }
 
-
 template<size_t N>
 MultiWorker<N>::~MultiWorker()
 {
@@ -183,3 +182,4 @@ template class MultiWorker<2>;
 template class MultiWorker<3>;
 template class MultiWorker<4>;
 template class MultiWorker<5>;
+template class MultiWorker<15>;

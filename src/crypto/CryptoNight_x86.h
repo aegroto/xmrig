@@ -980,4 +980,290 @@ inline void cryptonight_penta_hash(const uint8_t *__restrict__ input, size_t siz
     }
 }
 
+template<xmrig::Algo ALGO, bool SOFT_AES, int VARIANT>
+inline void cryptonight_decapenta_hash(const uint8_t *__restrict__ input, size_t size, uint8_t *__restrict__ output, cryptonight_ctx **__restrict__ ctx)
+{
+    constexpr size_t MASK       = xmrig::cn_select_mask<ALGO>();
+    constexpr size_t ITERATIONS = xmrig::cn_select_iter<ALGO>();
+    constexpr size_t MEM        = xmrig::cn_select_memory<ALGO>();
+    printf("decapenta hash %d %d %d\n", ALGO, SOFT_AES, VARIANT);
+    if (VARIANT > 0 && size < 43) {
+        memset(output, 0, 32 * 15);
+        return;
+    }
+    
+    for (size_t i = 0; i < 15; i++) {
+        keccak(input + size * i, static_cast<int>(size), ctx[i]->state, 200);
+        cn_explode_scratchpad<ALGO, MEM, SOFT_AES>(reinterpret_cast<__m128i*>(ctx[i]->state), reinterpret_cast<__m128i*>(ctx[i]->memory));
+    }
+
+    CONST_INIT(ctx[0], 0);
+    CONST_INIT(ctx[1], 1);
+    CONST_INIT(ctx[2], 2);
+    CONST_INIT(ctx[3], 3);
+    CONST_INIT(ctx[4], 4);
+    CONST_INIT(ctx[5], 5);
+    CONST_INIT(ctx[6], 6);
+    CONST_INIT(ctx[7], 7);
+    CONST_INIT(ctx[8], 8);
+    CONST_INIT(ctx[9], 9);
+    CONST_INIT(ctx[10], 10);
+    CONST_INIT(ctx[11], 11);
+    CONST_INIT(ctx[12], 12);
+    CONST_INIT(ctx[13], 13);
+    CONST_INIT(ctx[14], 14);
+
+    uint8_t* l0  = ctx[0]->memory;
+    uint8_t* l1  = ctx[1]->memory;
+    uint8_t* l2  = ctx[2]->memory;
+    uint8_t* l3  = ctx[3]->memory;
+    uint8_t* l4  = ctx[4]->memory;
+    uint8_t* l5  = ctx[5]->memory;
+    uint8_t* l6  = ctx[6]->memory;
+    uint8_t* l7  = ctx[7]->memory;
+    uint8_t* l8  = ctx[8]->memory;
+    uint8_t* l9  = ctx[9]->memory;
+    uint8_t* l10  = ctx[10]->memory;
+    uint8_t* l11  = ctx[11]->memory;
+    uint8_t* l12  = ctx[12]->memory;
+    uint8_t* l13  = ctx[13]->memory;
+    uint8_t* l14  = ctx[14]->memory;
+
+    uint64_t* h0 = reinterpret_cast<uint64_t*>(ctx[0]->state);
+    uint64_t* h1 = reinterpret_cast<uint64_t*>(ctx[1]->state);
+    uint64_t* h2 = reinterpret_cast<uint64_t*>(ctx[2]->state);
+    uint64_t* h3 = reinterpret_cast<uint64_t*>(ctx[3]->state);
+    uint64_t* h4 = reinterpret_cast<uint64_t*>(ctx[4]->state);
+    uint64_t* h5 = reinterpret_cast<uint64_t*>(ctx[5]->state);
+    uint64_t* h6 = reinterpret_cast<uint64_t*>(ctx[6]->state);
+    uint64_t* h7 = reinterpret_cast<uint64_t*>(ctx[7]->state);
+    uint64_t* h8 = reinterpret_cast<uint64_t*>(ctx[8]->state);
+    uint64_t* h9 = reinterpret_cast<uint64_t*>(ctx[9]->state);
+    uint64_t* h10 = reinterpret_cast<uint64_t*>(ctx[10]->state);
+    uint64_t* h11 = reinterpret_cast<uint64_t*>(ctx[11]->state);
+    uint64_t* h12 = reinterpret_cast<uint64_t*>(ctx[12]->state);
+    uint64_t* h13 = reinterpret_cast<uint64_t*>(ctx[13]->state);
+    uint64_t* h14 = reinterpret_cast<uint64_t*>(ctx[14]->state);
+
+    __m128i ax0 = _mm_set_epi64x(h0[1] ^ h0[5], h0[0] ^ h0[4]);
+    __m128i bx0 = _mm_set_epi64x(h0[3] ^ h0[7], h0[2] ^ h0[6]);
+
+    __m128i ax1 = _mm_set_epi64x(h1[1] ^ h1[5], h1[0] ^ h1[4]);
+    __m128i bx1 = _mm_set_epi64x(h1[3] ^ h1[7], h1[2] ^ h1[6]);
+    
+    __m128i ax2 = _mm_set_epi64x(h2[1] ^ h2[5], h2[0] ^ h2[4]);
+    __m128i bx2 = _mm_set_epi64x(h2[3] ^ h2[7], h2[2] ^ h2[6]);
+    
+    __m128i ax3 = _mm_set_epi64x(h3[1] ^ h3[5], h3[0] ^ h3[4]);
+    __m128i bx3 = _mm_set_epi64x(h3[3] ^ h3[7], h3[2] ^ h3[6]);
+    
+    __m128i ax4 = _mm_set_epi64x(h4[1] ^ h4[5], h4[0] ^ h4[4]);
+    __m128i bx4 = _mm_set_epi64x(h4[3] ^ h4[7], h4[2] ^ h4[6]);
+
+    __m128i ax5 = _mm_set_epi64x(h5[1] ^ h5[5], h5[0] ^ h5[4]);
+    __m128i bx5 = _mm_set_epi64x(h5[3] ^ h5[7], h5[2] ^ h5[6]);
+
+    __m128i ax6 = _mm_set_epi64x(h6[1] ^ h6[5], h6[0] ^ h6[4]);
+    __m128i bx6 = _mm_set_epi64x(h6[3] ^ h6[7], h6[2] ^ h6[6]);
+
+    __m128i ax7 = _mm_set_epi64x(h7[1] ^ h7[5], h7[0] ^ h7[4]);
+    __m128i bx7 = _mm_set_epi64x(h7[3] ^ h7[7], h7[2] ^ h7[6]);
+
+    __m128i ax8 = _mm_set_epi64x(h8[1] ^ h8[5], h8[0] ^ h8[4]);
+    __m128i bx8 = _mm_set_epi64x(h8[3] ^ h8[7], h8[2] ^ h8[6]);
+
+    __m128i ax9 = _mm_set_epi64x(h9[1] ^ h9[5], h9[0] ^ h9[4]);
+    __m128i bx9 = _mm_set_epi64x(h9[3] ^ h9[7], h9[2] ^ h9[6]);
+
+    __m128i ax10 = _mm_set_epi64x(h10[1] ^ h10[5], h10[0] ^ h10[4]);
+    __m128i bx10 = _mm_set_epi64x(h10[3] ^ h10[7], h10[2] ^ h10[6]);
+
+    __m128i ax11 = _mm_set_epi64x(h11[1] ^ h11[5], h11[0] ^ h11[4]);
+    __m128i bx11 = _mm_set_epi64x(h11[3] ^ h11[7], h11[2] ^ h11[6]);
+
+    __m128i ax12 = _mm_set_epi64x(h12[1] ^ h12[5], h12[0] ^ h12[4]);
+    __m128i bx12 = _mm_set_epi64x(h12[3] ^ h12[7], h12[2] ^ h12[6]);
+
+    __m128i ax13 = _mm_set_epi64x(h13[1] ^ h13[5], h13[0] ^ h13[4]);
+    __m128i bx13 = _mm_set_epi64x(h13[3] ^ h13[7], h13[2] ^ h13[6]);
+
+    __m128i ax14 = _mm_set_epi64x(h14[1] ^ h14[5], h14[0] ^ h14[4]);
+    __m128i bx14 = _mm_set_epi64x(h14[3] ^ h14[7], h14[2] ^ h14[6]);
+
+    __m128i cx0 = _mm_set_epi64x(0, 0);
+    __m128i cx1 = _mm_set_epi64x(0, 0);
+    __m128i cx2 = _mm_set_epi64x(0, 0);
+    __m128i cx3 = _mm_set_epi64x(0, 0);
+    __m128i cx4 = _mm_set_epi64x(0, 0);
+    __m128i cx5 = _mm_set_epi64x(0, 0);
+    __m128i cx6 = _mm_set_epi64x(0, 0);
+    __m128i cx7 = _mm_set_epi64x(0, 0);
+    __m128i cx8 = _mm_set_epi64x(0, 0);
+    __m128i cx9 = _mm_set_epi64x(0, 0);
+    __m128i cx10 = _mm_set_epi64x(0, 0);
+    __m128i cx11 = _mm_set_epi64x(0, 0);
+    __m128i cx12 = _mm_set_epi64x(0, 0);
+    __m128i cx13 = _mm_set_epi64x(0, 0);
+    __m128i cx14 = _mm_set_epi64x(0, 0);
+
+    uint64_t idx0, idx1, idx2, idx3, idx4, idx5, idx6, idx7, idx8, idx9, idx10, idx11, idx12, idx13, idx14;
+    idx0 = EXTRACT64(ax0);
+    idx1 = EXTRACT64(ax1);
+    idx2 = EXTRACT64(ax2);
+    idx3 = EXTRACT64(ax3);
+    idx4 = EXTRACT64(ax4);
+    idx5 = EXTRACT64(ax5);
+    idx6 = EXTRACT64(ax6);
+    idx7 = EXTRACT64(ax7);
+    idx8 = EXTRACT64(ax8);
+    idx9 = EXTRACT64(ax9);
+    idx10 = EXTRACT64(ax10);
+    idx11 = EXTRACT64(ax11);
+    idx12 = EXTRACT64(ax12);
+    idx13 = EXTRACT64(ax13);
+    idx14 = EXTRACT64(ax14);
+
+for (size_t i = 0; i < ITERATIONS / 2; i++)
+    {
+        uint64_t hi, lo;
+        __m128i *ptr0, *ptr1, *ptr2, *ptr3, *ptr4, *ptr5, *ptr6, *ptr7, *ptr8, *ptr9, *ptr10, *ptr11, *ptr12, *ptr13, *ptr14;
+
+        // EVEN ROUND
+        CN_STEP1(ax0, bx0, cx0, l0, ptr0, idx0);
+        CN_STEP1(ax1, bx1, cx1, l1, ptr1, idx1);
+        CN_STEP1(ax2, bx2, cx2, l2, ptr2, idx2);
+        CN_STEP1(ax3, bx3, cx3, l3, ptr3, idx3);
+        CN_STEP1(ax4, bx4, cx4, l4, ptr4, idx4);
+        CN_STEP1(ax5, bx5, cx5, l5, ptr5, idx5);
+        CN_STEP1(ax6, bx6, cx6, l6, ptr6, idx6);
+        CN_STEP1(ax7, bx7, cx7, l7, ptr7, idx7);
+        CN_STEP1(ax8, bx8, cx8, l8, ptr8, idx8);
+        CN_STEP1(ax9, bx9, cx9, l9, ptr9, idx9);
+        CN_STEP1(ax10, bx10, cx10, l10, ptr10, idx10);
+        CN_STEP1(ax11, bx11, cx11, l11, ptr11, idx11);
+        CN_STEP1(ax12, bx12, cx12, l12, ptr12, idx12);
+        CN_STEP1(ax13, bx13, cx13, l13, ptr13, idx13);
+        CN_STEP1(ax14, bx14, cx14, l14, ptr14, idx14);
+
+        CN_STEP2(ax0, bx0, cx0, l0, ptr0, idx0);
+        CN_STEP2(ax1, bx1, cx1, l1, ptr1, idx1);
+        CN_STEP2(ax2, bx2, cx2, l2, ptr2, idx2);
+        CN_STEP2(ax3, bx3, cx3, l3, ptr3, idx3);
+        CN_STEP2(ax4, bx4, cx4, l4, ptr4, idx4);
+        CN_STEP2(ax5, bx5, cx5, l5, ptr5, idx5);
+        CN_STEP2(ax6, bx6, cx6, l6, ptr6, idx6);
+        CN_STEP2(ax7, bx7, cx7, l7, ptr7, idx7);
+        CN_STEP2(ax8, bx8, cx8, l8, ptr8, idx8);
+        CN_STEP2(ax9, bx9, cx9, l9, ptr9, idx9);
+        CN_STEP2(ax10, bx10, cx10, l10, ptr10, idx10);
+        CN_STEP2(ax11, bx11, cx11, l11, ptr11, idx11);
+        CN_STEP2(ax12, bx12, cx12, l12, ptr12, idx12);
+        CN_STEP2(ax13, bx13, cx13, l13, ptr13, idx13);
+        CN_STEP2(ax14, bx14, cx14, l14, ptr14, idx14);
+
+        CN_STEP3(ax0, bx0, cx0, l0, ptr0, idx0);
+        CN_STEP3(ax1, bx1, cx1, l1, ptr1, idx1);
+        CN_STEP3(ax2, bx2, cx2, l2, ptr2, idx2);
+        CN_STEP3(ax3, bx3, cx3, l3, ptr3, idx3);
+        CN_STEP3(ax4, bx4, cx4, l4, ptr4, idx4);
+        CN_STEP3(ax5, bx5, cx5, l5, ptr5, idx5);
+        CN_STEP3(ax6, bx6, cx6, l6, ptr6, idx6);
+        CN_STEP3(ax7, bx7, cx7, l7, ptr7, idx7);
+        CN_STEP3(ax8, bx8, cx8, l8, ptr8, idx8);
+        CN_STEP3(ax9, bx9, cx9, l9, ptr9, idx9);
+        CN_STEP3(ax10, bx10, cx10, l10, ptr10, idx10);
+        CN_STEP3(ax11, bx11, cx11, l11, ptr11, idx11);
+        CN_STEP3(ax12, bx12, cx12, l12, ptr12, idx12);
+        CN_STEP3(ax13, bx13, cx13, l13, ptr13, idx13);
+        CN_STEP3(ax14, bx14, cx14, l14, ptr14, idx14);
+
+        CN_STEP4(ax0, bx0, cx0, l0, mc0, ptr0, idx0);
+        CN_STEP4(ax1, bx1, cx1, l1, mc1, ptr1, idx1);
+        CN_STEP4(ax2, bx2, cx2, l2, mc2, ptr2, idx2);
+        CN_STEP4(ax3, bx3, cx3, l3, mc3, ptr3, idx3);
+        CN_STEP4(ax4, bx4, cx4, l4, mc4, ptr4, idx4);
+        CN_STEP4(ax5, bx5, cx5, l5, mc5, ptr5, idx5);
+        CN_STEP4(ax6, bx6, cx6, l6, mc6, ptr6, idx6);
+        CN_STEP4(ax7, bx7, cx7, l7, mc7, ptr7, idx7);
+        CN_STEP4(ax8, bx8, cx8, l8, mc8, ptr8, idx8);
+        CN_STEP4(ax9, bx9, cx9, l9, mc9, ptr9, idx9);
+        CN_STEP4(ax10, bx10, cx10, l10, mc10, ptr10, idx10);
+        CN_STEP4(ax11, bx11, cx11, l11, mc11, ptr11, idx11);
+        CN_STEP4(ax12, bx12, cx12, l12, mc12, ptr12, idx12);
+        CN_STEP4(ax13, bx13, cx13, l13, mc13, ptr13, idx13);
+        CN_STEP4(ax14, bx14, cx14, l14, mc14, ptr14, idx14);
+
+        // ODD ROUND
+        CN_STEP1(ax0, cx0, bx0, l0, ptr0, idx0);
+        CN_STEP1(ax1, cx1, bx1, l1, ptr1, idx1);
+        CN_STEP1(ax2, cx2, bx2, l2, ptr2, idx2);
+        CN_STEP1(ax3, cx3, bx3, l3, ptr3, idx3);
+        CN_STEP1(ax4, cx4, bx4, l4, ptr4, idx4);
+        CN_STEP1(ax5, cx5, bx5, l5, ptr5, idx5);
+        CN_STEP1(ax6, cx6, bx6, l6, ptr6, idx6);
+        CN_STEP1(ax7, cx7, bx7, l7, ptr7, idx7);
+        CN_STEP1(ax8, cx8, bx8, l8, ptr8, idx8);
+        CN_STEP1(ax9, cx9, bx9, l9, ptr9, idx9);
+        CN_STEP1(ax10, cx10, bx10, l10, ptr10, idx10);
+        CN_STEP1(ax11, cx11, bx11, l11, ptr11, idx11);
+        CN_STEP1(ax12, cx12, bx12, l12, ptr12, idx12);
+        CN_STEP1(ax13, cx13, bx13, l13, ptr13, idx13);
+        CN_STEP1(ax14, cx14, bx14, l14, ptr14, idx14);
+
+        CN_STEP2(ax0, cx0, bx0, l0, ptr0, idx0);
+        CN_STEP2(ax1, cx1, bx1, l1, ptr1, idx1);
+        CN_STEP2(ax2, cx2, bx2, l2, ptr2, idx2);
+        CN_STEP2(ax3, cx3, bx3, l3, ptr3, idx3);
+        CN_STEP2(ax4, cx4, bx4, l4, ptr4, idx4);
+        CN_STEP2(ax5, cx5, bx5, l5, ptr5, idx5);
+        CN_STEP2(ax6, cx6, bx6, l6, ptr6, idx6);
+        CN_STEP2(ax7, cx7, bx7, l7, ptr7, idx7);
+        CN_STEP2(ax8, cx8, bx8, l8, ptr8, idx8);
+        CN_STEP2(ax9, cx9, bx9, l9, ptr9, idx9);
+        CN_STEP2(ax10, cx10, bx10, l10, ptr10, idx10);
+        CN_STEP2(ax11, cx11, bx11, l11, ptr11, idx11);
+        CN_STEP2(ax12, cx12, bx12, l12, ptr12, idx12);
+        CN_STEP2(ax13, cx13, bx13, l13, ptr13, idx13);
+        CN_STEP2(ax14, cx14, bx14, l14, ptr14, idx14);
+
+        CN_STEP3(ax0, cx0, bx0, l0, ptr0, idx0);
+        CN_STEP3(ax1, cx1, bx1, l1, ptr1, idx1);
+        CN_STEP3(ax2, cx2, bx2, l2, ptr2, idx2);
+        CN_STEP3(ax3, cx3, bx3, l3, ptr3, idx3);
+        CN_STEP3(ax4, cx4, bx4, l4, ptr4, idx4);
+        CN_STEP3(ax5, cx5, bx5, l5, ptr5, idx5);
+        CN_STEP3(ax6, cx6, bx6, l6, ptr6, idx6);
+        CN_STEP3(ax7, cx7, bx7, l7, ptr7, idx7);
+        CN_STEP3(ax8, cx8, bx8, l8, ptr8, idx8);
+        CN_STEP3(ax9, cx9, bx9, l9, ptr9, idx9);
+        CN_STEP3(ax10, cx10, bx10, l10, ptr10, idx10);
+        CN_STEP3(ax11, cx11, bx11, l11, ptr11, idx11);
+        CN_STEP3(ax12, cx12, bx12, l12, ptr12, idx12);
+        CN_STEP3(ax13, cx13, bx13, l13, ptr13, idx13);
+        CN_STEP3(ax14, cx14, bx14, l14, ptr14, idx14);
+
+        CN_STEP4(ax0, cx0, bx0, l0, mc0, ptr0, idx0);
+        CN_STEP4(ax1, cx1, bx1, l1, mc1, ptr1, idx1);
+        CN_STEP4(ax2, cx2, bx2, l2, mc2, ptr2, idx2);
+        CN_STEP4(ax3, cx3, bx3, l3, mc3, ptr3, idx3);
+        CN_STEP4(ax4, cx4, bx4, l4, mc4, ptr4, idx4);
+        CN_STEP4(ax5, cx5, bx5, l5, mc5, ptr5, idx5);
+        CN_STEP4(ax6, cx6, bx6, l6, mc6, ptr6, idx6);
+        CN_STEP4(ax7, cx7, bx7, l7, mc7, ptr7, idx7);
+        CN_STEP4(ax8, cx8, bx8, l8, mc8, ptr8, idx8);
+        CN_STEP4(ax9, cx9, bx9, l9, mc9, ptr9, idx9);
+        CN_STEP4(ax10, cx10, bx10, l10, mc10, ptr10, idx10);
+        CN_STEP4(ax11, cx11, bx11, l11, mc11, ptr11, idx11);
+        CN_STEP4(ax12, cx12, bx12, l12, mc12, ptr12, idx12);
+        CN_STEP4(ax13, cx13, bx13, l13, mc13, ptr13, idx13);
+        CN_STEP4(ax14, cx14, bx14, l14, mc14, ptr14, idx14);
+    }
+
+    for (size_t i = 0; i < 15; i++) {
+        cn_implode_scratchpad<ALGO, MEM, SOFT_AES>(reinterpret_cast<__m128i*>(ctx[i]->memory), reinterpret_cast<__m128i*>(ctx[i]->state));
+        keccakf(reinterpret_cast<uint64_t*>(ctx[i]->state), 24);
+        extra_hashes[ctx[i]->state[0] & 3](ctx[i]->state, 200, output + 32 * i);
+    }
+}
+
 #endif /* __CRYPTONIGHT_X86_H__ */
