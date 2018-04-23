@@ -866,7 +866,7 @@ inline void cryptonight_penta_hash(const uint8_t *__restrict__ input, size_t siz
     constexpr size_t MASK       = xmrig::cn_select_mask<ALGO>();
     constexpr size_t ITERATIONS = xmrig::cn_select_iter<ALGO>();
     constexpr size_t MEM        = xmrig::cn_select_memory<ALGO>();
-    printf("penta hash %d %d %d\n", ALGO, SOFT_AES, VARIANT);
+    
     if (VARIANT > 0 && size < 43) {
         memset(output, 0, 32 * 5);
         return;
