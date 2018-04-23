@@ -148,7 +148,7 @@ xmrig::CpuThread::cn_hash_fun xmrig::CpuThread::fn(Algo algorithm, AlgoVariant a
     }
 #   endif
 
-    return func_table[20 * algorithm + 12 * variant + av - 1];
+    return func_table[24 * algorithm + 12 * variant + av - 1];
 }
 
 

@@ -866,7 +866,7 @@ inline void cryptonight_penta_hash(const uint8_t *__restrict__ input, size_t siz
     constexpr size_t MASK       = xmrig::cn_select_mask<ALGO>();
     constexpr size_t ITERATIONS = xmrig::cn_select_iter<ALGO>();
     constexpr size_t MEM        = xmrig::cn_select_memory<ALGO>();
-
+    printf("penta hash %d %d %d\n", ALGO, SOFT_AES, VARIANT);
     if (VARIANT > 0 && size < 43) {
         memset(output, 0, 32 * 5);
         return;
@@ -988,11 +988,11 @@ inline void cryptonight_decapenta_hash(const uint8_t *__restrict__ input, size_t
     constexpr size_t MEM        = xmrig::cn_select_memory<ALGO>();
     printf("decapenta hash %d %d %d\n", ALGO, SOFT_AES, VARIANT);
     if (VARIANT > 0 && size < 43) {
-        memset(output, 0, 32 * 15);
+        memset(output, 0, 32 * 5);
         return;
     }
     
-    for (size_t i = 0; i < 15; i++) {
+    for (size_t i = 0; i < 5; i++) {
         keccak(input + size * i, static_cast<int>(size), ctx[i]->state, 200);
         cn_explode_scratchpad<ALGO, MEM, SOFT_AES>(reinterpret_cast<__m128i*>(ctx[i]->state), reinterpret_cast<__m128i*>(ctx[i]->memory));
     }
@@ -1259,7 +1259,7 @@ for (size_t i = 0; i < ITERATIONS / 2; i++)
         CN_STEP4(ax14, cx14, bx14, l14, mc14, ptr14, idx14);
     }
 
-    for (size_t i = 0; i < 15; i++) {
+    for (size_t i = 0; i < 5; i++) {
         cn_implode_scratchpad<ALGO, MEM, SOFT_AES>(reinterpret_cast<__m128i*>(ctx[i]->memory), reinterpret_cast<__m128i*>(ctx[i]->state));
         keccakf(reinterpret_cast<uint64_t*>(ctx[i]->state), 24);
         extra_hashes[ctx[i]->state[0] & 3](ctx[i]->state, 200, output + 32 * i);
