@@ -236,8 +236,8 @@ void Workers::onReady(void *arg)
         worker = new MultiWorker<5>(handle);
         break;
 
-    case 6:
-        worker = new MultiWorker<6>(handle);
+    case 7:
+        worker = new MultiWorker<7>(handle);
         break;
         
     default:

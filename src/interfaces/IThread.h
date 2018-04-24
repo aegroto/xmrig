@@ -49,7 +49,7 @@ public:
         TripleWay,
         QuadWay,
         PentaWay,
-        DecapentaWay = 6,
+        DecapentaWay = 7,
     };
 
     virtual ~IThread() {}
