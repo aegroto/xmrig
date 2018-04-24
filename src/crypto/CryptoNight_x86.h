@@ -988,11 +988,11 @@ inline void cryptonight_decapenta_hash(const uint8_t *__restrict__ input, size_t
     constexpr size_t MEM        = xmrig::cn_select_memory<ALGO>();
     // printf("decapenta hash %d %d %d\n", ALGO, SOFT_AES, VARIANT);
     if (VARIANT > 0 && size < 43) {
-        memset(output, 0, 32 * 15);
+        memset(output, 0, 32 * 10);
         return;
     }
     
-    for (size_t i = 0; i < 15; i++) {
+    for (size_t i = 0; i < 10; i++) {
         keccak(input + size * i, static_cast<int>(size), ctx[i]->state, 200);
         cn_explode_scratchpad<ALGO, MEM, SOFT_AES>(reinterpret_cast<__m128i*>(ctx[i]->state), reinterpret_cast<__m128i*>(ctx[i]->memory));
     }
@@ -1007,11 +1007,11 @@ inline void cryptonight_decapenta_hash(const uint8_t *__restrict__ input, size_t
     CONST_INIT(ctx[7], 7);
     CONST_INIT(ctx[8], 8);
     CONST_INIT(ctx[9], 9);
-    CONST_INIT(ctx[10], 10);
+    /*CONST_INIT(ctx[10], 10);
     CONST_INIT(ctx[11], 11);
     CONST_INIT(ctx[12], 12);
     CONST_INIT(ctx[13], 13);
-    CONST_INIT(ctx[14], 14);
+    CONST_INIT(ctx[14], 14);*/
 
     uint8_t* l0  = ctx[0]->memory;
     uint8_t* l1  = ctx[1]->memory;
@@ -1023,11 +1023,11 @@ inline void cryptonight_decapenta_hash(const uint8_t *__restrict__ input, size_t
     uint8_t* l7  = ctx[7]->memory;
     uint8_t* l8  = ctx[8]->memory;
     uint8_t* l9  = ctx[9]->memory;
-    uint8_t* l10  = ctx[10]->memory;
+    /*uint8_t* l10  = ctx[10]->memory;
     uint8_t* l11  = ctx[11]->memory;
     uint8_t* l12  = ctx[12]->memory;
     uint8_t* l13  = ctx[13]->memory;
-    uint8_t* l14  = ctx[14]->memory;
+    uint8_t* l14  = ctx[14]->memory;*/
 
     uint64_t* h0 = reinterpret_cast<uint64_t*>(ctx[0]->state);
     uint64_t* h1 = reinterpret_cast<uint64_t*>(ctx[1]->state);
@@ -1039,12 +1039,12 @@ inline void cryptonight_decapenta_hash(const uint8_t *__restrict__ input, size_t
     uint64_t* h7 = reinterpret_cast<uint64_t*>(ctx[7]->state);
     uint64_t* h8 = reinterpret_cast<uint64_t*>(ctx[8]->state);
     uint64_t* h9 = reinterpret_cast<uint64_t*>(ctx[9]->state);
-    uint64_t* h10 = reinterpret_cast<uint64_t*>(ctx[10]->state);
+    /*uint64_t* h10 = reinterpret_cast<uint64_t*>(ctx[10]->state);
     uint64_t* h11 = reinterpret_cast<uint64_t*>(ctx[11]->state);
     uint64_t* h12 = reinterpret_cast<uint64_t*>(ctx[12]->state);
     uint64_t* h13 = reinterpret_cast<uint64_t*>(ctx[13]->state);
     uint64_t* h14 = reinterpret_cast<uint64_t*>(ctx[14]->state);
-
+    */
     __m128i ax0 = _mm_set_epi64x(h0[1] ^ h0[5], h0[0] ^ h0[4]);
     __m128i bx0 = _mm_set_epi64x(h0[3] ^ h0[7], h0[2] ^ h0[6]);
 
@@ -1075,7 +1075,7 @@ inline void cryptonight_decapenta_hash(const uint8_t *__restrict__ input, size_t
     __m128i ax9 = _mm_set_epi64x(h9[1] ^ h9[5], h9[0] ^ h9[4]);
     __m128i bx9 = _mm_set_epi64x(h9[3] ^ h9[7], h9[2] ^ h9[6]);
 
-    __m128i ax10 = _mm_set_epi64x(h10[1] ^ h10[5], h10[0] ^ h10[4]);
+    /*__m128i ax10 = _mm_set_epi64x(h10[1] ^ h10[5], h10[0] ^ h10[4]);
     __m128i bx10 = _mm_set_epi64x(h10[3] ^ h10[7], h10[2] ^ h10[6]);
 
     __m128i ax11 = _mm_set_epi64x(h11[1] ^ h11[5], h11[0] ^ h11[4]);
@@ -1089,7 +1089,7 @@ inline void cryptonight_decapenta_hash(const uint8_t *__restrict__ input, size_t
 
     __m128i ax14 = _mm_set_epi64x(h14[1] ^ h14[5], h14[0] ^ h14[4]);
     __m128i bx14 = _mm_set_epi64x(h14[3] ^ h14[7], h14[2] ^ h14[6]);
-
+    */
     __m128i cx0 = _mm_set_epi64x(0, 0);
     __m128i cx1 = _mm_set_epi64x(0, 0);
     __m128i cx2 = _mm_set_epi64x(0, 0);
@@ -1100,13 +1100,13 @@ inline void cryptonight_decapenta_hash(const uint8_t *__restrict__ input, size_t
     __m128i cx7 = _mm_set_epi64x(0, 0);
     __m128i cx8 = _mm_set_epi64x(0, 0);
     __m128i cx9 = _mm_set_epi64x(0, 0);
-    __m128i cx10 = _mm_set_epi64x(0, 0);
+    /*__m128i cx10 = _mm_set_epi64x(0, 0);
     __m128i cx11 = _mm_set_epi64x(0, 0);
     __m128i cx12 = _mm_set_epi64x(0, 0);
     __m128i cx13 = _mm_set_epi64x(0, 0);
     __m128i cx14 = _mm_set_epi64x(0, 0);
-
-    uint64_t idx0, idx1, idx2, idx3, idx4, idx5, idx6, idx7, idx8, idx9, idx10, idx11, idx12, idx13, idx14;
+    */
+    uint64_t idx0, idx1, idx2, idx3, idx4, idx5, idx6, idx7, idx8, idx9/*, idx10, idx11, idx12, idx13, idx14*/;
     idx0 = EXTRACT64(ax0);
     idx1 = EXTRACT64(ax1);
     idx2 = EXTRACT64(ax2);
@@ -1117,16 +1117,16 @@ inline void cryptonight_decapenta_hash(const uint8_t *__restrict__ input, size_t
     idx7 = EXTRACT64(ax7);
     idx8 = EXTRACT64(ax8);
     idx9 = EXTRACT64(ax9);
-    idx10 = EXTRACT64(ax10);
+    /*idx10 = EXTRACT64(ax10);
     idx11 = EXTRACT64(ax11);
     idx12 = EXTRACT64(ax12);
     idx13 = EXTRACT64(ax13);
     idx14 = EXTRACT64(ax14);
-
-for (size_t i = 0; i < ITERATIONS / 2; i++)
+    */
+    for (size_t i = 0; i < ITERATIONS / 2; i++)
     {
         uint64_t hi, lo;
-        __m128i *ptr0, *ptr1, *ptr2, *ptr3, *ptr4, *ptr5, *ptr6, *ptr7, *ptr8, *ptr9, *ptr10, *ptr11, *ptr12, *ptr13, *ptr14;
+        __m128i *ptr0, *ptr1, *ptr2, *ptr3, *ptr4, *ptr5, *ptr6, *ptr7, *ptr8, *ptr9/*, *ptr10, *ptr11, *ptr12, *ptr13, *ptr14*/;
 
         // EVEN ROUND
         CN_STEP1(ax0, bx0, cx0, l0, ptr0, idx0);
@@ -1139,12 +1139,12 @@ for (size_t i = 0; i < ITERATIONS / 2; i++)
         CN_STEP1(ax7, bx7, cx7, l7, ptr7, idx7);
         CN_STEP1(ax8, bx8, cx8, l8, ptr8, idx8);
         CN_STEP1(ax9, bx9, cx9, l9, ptr9, idx9);
-        CN_STEP1(ax10, bx10, cx10, l10, ptr10, idx10);
+        /*CN_STEP1(ax10, bx10, cx10, l10, ptr10, idx10);
         CN_STEP1(ax11, bx11, cx11, l11, ptr11, idx11);
         CN_STEP1(ax12, bx12, cx12, l12, ptr12, idx12);
         CN_STEP1(ax13, bx13, cx13, l13, ptr13, idx13);
         CN_STEP1(ax14, bx14, cx14, l14, ptr14, idx14);
-
+        */
         CN_STEP2(ax0, bx0, cx0, l0, ptr0, idx0);
         CN_STEP2(ax1, bx1, cx1, l1, ptr1, idx1);
         CN_STEP2(ax2, bx2, cx2, l2, ptr2, idx2);
@@ -1155,12 +1155,12 @@ for (size_t i = 0; i < ITERATIONS / 2; i++)
         CN_STEP2(ax7, bx7, cx7, l7, ptr7, idx7);
         CN_STEP2(ax8, bx8, cx8, l8, ptr8, idx8);
         CN_STEP2(ax9, bx9, cx9, l9, ptr9, idx9);
-        CN_STEP2(ax10, bx10, cx10, l10, ptr10, idx10);
+        /*CN_STEP2(ax10, bx10, cx10, l10, ptr10, idx10);
         CN_STEP2(ax11, bx11, cx11, l11, ptr11, idx11);
         CN_STEP2(ax12, bx12, cx12, l12, ptr12, idx12);
         CN_STEP2(ax13, bx13, cx13, l13, ptr13, idx13);
         CN_STEP2(ax14, bx14, cx14, l14, ptr14, idx14);
-
+        */
         CN_STEP3(ax0, bx0, cx0, l0, ptr0, idx0);
         CN_STEP3(ax1, bx1, cx1, l1, ptr1, idx1);
         CN_STEP3(ax2, bx2, cx2, l2, ptr2, idx2);
@@ -1171,12 +1171,12 @@ for (size_t i = 0; i < ITERATIONS / 2; i++)
         CN_STEP3(ax7, bx7, cx7, l7, ptr7, idx7);
         CN_STEP3(ax8, bx8, cx8, l8, ptr8, idx8);
         CN_STEP3(ax9, bx9, cx9, l9, ptr9, idx9);
-        CN_STEP3(ax10, bx10, cx10, l10, ptr10, idx10);
+        /*CN_STEP3(ax10, bx10, cx10, l10, ptr10, idx10);
         CN_STEP3(ax11, bx11, cx11, l11, ptr11, idx11);
         CN_STEP3(ax12, bx12, cx12, l12, ptr12, idx12);
         CN_STEP3(ax13, bx13, cx13, l13, ptr13, idx13);
         CN_STEP3(ax14, bx14, cx14, l14, ptr14, idx14);
-
+        */
         CN_STEP4(ax0, bx0, cx0, l0, mc0, ptr0, idx0);
         CN_STEP4(ax1, bx1, cx1, l1, mc1, ptr1, idx1);
         CN_STEP4(ax2, bx2, cx2, l2, mc2, ptr2, idx2);
@@ -1187,12 +1187,12 @@ for (size_t i = 0; i < ITERATIONS / 2; i++)
         CN_STEP4(ax7, bx7, cx7, l7, mc7, ptr7, idx7);
         CN_STEP4(ax8, bx8, cx8, l8, mc8, ptr8, idx8);
         CN_STEP4(ax9, bx9, cx9, l9, mc9, ptr9, idx9);
-        CN_STEP4(ax10, bx10, cx10, l10, mc10, ptr10, idx10);
+        /*CN_STEP4(ax10, bx10, cx10, l10, mc10, ptr10, idx10);
         CN_STEP4(ax11, bx11, cx11, l11, mc11, ptr11, idx11);
         CN_STEP4(ax12, bx12, cx12, l12, mc12, ptr12, idx12);
         CN_STEP4(ax13, bx13, cx13, l13, mc13, ptr13, idx13);
         CN_STEP4(ax14, bx14, cx14, l14, mc14, ptr14, idx14);
-
+        */
         // ODD ROUND
         CN_STEP1(ax0, cx0, bx0, l0, ptr0, idx0);
         CN_STEP1(ax1, cx1, bx1, l1, ptr1, idx1);
@@ -1204,12 +1204,12 @@ for (size_t i = 0; i < ITERATIONS / 2; i++)
         CN_STEP1(ax7, cx7, bx7, l7, ptr7, idx7);
         CN_STEP1(ax8, cx8, bx8, l8, ptr8, idx8);
         CN_STEP1(ax9, cx9, bx9, l9, ptr9, idx9);
-        CN_STEP1(ax10, cx10, bx10, l10, ptr10, idx10);
+        /*CN_STEP1(ax10, cx10, bx10, l10, ptr10, idx10);
         CN_STEP1(ax11, cx11, bx11, l11, ptr11, idx11);
         CN_STEP1(ax12, cx12, bx12, l12, ptr12, idx12);
         CN_STEP1(ax13, cx13, bx13, l13, ptr13, idx13);
         CN_STEP1(ax14, cx14, bx14, l14, ptr14, idx14);
-
+        */
         CN_STEP2(ax0, cx0, bx0, l0, ptr0, idx0);
         CN_STEP2(ax1, cx1, bx1, l1, ptr1, idx1);
         CN_STEP2(ax2, cx2, bx2, l2, ptr2, idx2);
@@ -1220,12 +1220,12 @@ for (size_t i = 0; i < ITERATIONS / 2; i++)
         CN_STEP2(ax7, cx7, bx7, l7, ptr7, idx7);
         CN_STEP2(ax8, cx8, bx8, l8, ptr8, idx8);
         CN_STEP2(ax9, cx9, bx9, l9, ptr9, idx9);
-        CN_STEP2(ax10, cx10, bx10, l10, ptr10, idx10);
+        /*CN_STEP2(ax10, cx10, bx10, l10, ptr10, idx10);
         CN_STEP2(ax11, cx11, bx11, l11, ptr11, idx11);
         CN_STEP2(ax12, cx12, bx12, l12, ptr12, idx12);
         CN_STEP2(ax13, cx13, bx13, l13, ptr13, idx13);
         CN_STEP2(ax14, cx14, bx14, l14, ptr14, idx14);
-
+        */
         CN_STEP3(ax0, cx0, bx0, l0, ptr0, idx0);
         CN_STEP3(ax1, cx1, bx1, l1, ptr1, idx1);
         CN_STEP3(ax2, cx2, bx2, l2, ptr2, idx2);
@@ -1236,12 +1236,12 @@ for (size_t i = 0; i < ITERATIONS / 2; i++)
         CN_STEP3(ax7, cx7, bx7, l7, ptr7, idx7);
         CN_STEP3(ax8, cx8, bx8, l8, ptr8, idx8);
         CN_STEP3(ax9, cx9, bx9, l9, ptr9, idx9);
-        CN_STEP3(ax10, cx10, bx10, l10, ptr10, idx10);
+        /*CN_STEP3(ax10, cx10, bx10, l10, ptr10, idx10);
         CN_STEP3(ax11, cx11, bx11, l11, ptr11, idx11);
         CN_STEP3(ax12, cx12, bx12, l12, ptr12, idx12);
         CN_STEP3(ax13, cx13, bx13, l13, ptr13, idx13);
         CN_STEP3(ax14, cx14, bx14, l14, ptr14, idx14);
-
+        */
         CN_STEP4(ax0, cx0, bx0, l0, mc0, ptr0, idx0);
         CN_STEP4(ax1, cx1, bx1, l1, mc1, ptr1, idx1);
         CN_STEP4(ax2, cx2, bx2, l2, mc2, ptr2, idx2);
@@ -1252,14 +1252,14 @@ for (size_t i = 0; i < ITERATIONS / 2; i++)
         CN_STEP4(ax7, cx7, bx7, l7, mc7, ptr7, idx7);
         CN_STEP4(ax8, cx8, bx8, l8, mc8, ptr8, idx8);
         CN_STEP4(ax9, cx9, bx9, l9, mc9, ptr9, idx9);
-        CN_STEP4(ax10, cx10, bx10, l10, mc10, ptr10, idx10);
+        /*CN_STEP4(ax10, cx10, bx10, l10, mc10, ptr10, idx10);
         CN_STEP4(ax11, cx11, bx11, l11, mc11, ptr11, idx11);
         CN_STEP4(ax12, cx12, bx12, l12, mc12, ptr12, idx12);
         CN_STEP4(ax13, cx13, bx13, l13, mc13, ptr13, idx13);
         CN_STEP4(ax14, cx14, bx14, l14, mc14, ptr14, idx14);
-    }
+    */}
 
-    for (size_t i = 0; i < 15; i++) {
+    for (size_t i = 0; i < 10; i++) {
         cn_implode_scratchpad<ALGO, MEM, SOFT_AES>(reinterpret_cast<__m128i*>(ctx[i]->memory), reinterpret_cast<__m128i*>(ctx[i]->state));
         keccakf(reinterpret_cast<uint64_t*>(ctx[i]->state), 24);
         extra_hashes[ctx[i]->state[0] & 3](ctx[i]->state, 200, output + 32 * i);

@@ -183,4 +183,4 @@ template class MultiWorker<2>;
 template class MultiWorker<3>;
 template class MultiWorker<4>;
 template class MultiWorker<5>;
-template class MultiWorker<15>;
+template class MultiWorker<10>;

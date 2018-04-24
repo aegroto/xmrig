@@ -44,7 +44,7 @@ public:
 
         inline void setMultiway(int value)
         {
-            if (value >= SingleWay && value <= PentaWay) {
+            if (value >= SingleWay && value <= DecapentaWay) {
                 multiway = static_cast<Multiway>(value);
                 valid    = true;
             }
