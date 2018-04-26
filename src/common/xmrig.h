@@ -53,8 +53,8 @@ enum AlgoVariant {
     AV_TRIPLE_SOFT, // --av=8  Triple hash mode (Software AES)
     AV_QUAD_SOFT,   // --av=9  Quard hash mode  (Software AES)
     AV_PENTA_SOFT,  // --av=10 Penta hash mode  (Software AES)
-    AV_DECAPENTA,   // --av=11
-    AV_DECAPENTA_SOFT, // --av=12
+    AV_EPTA,   // --av=11
+    AV_EPTA_SOFT, // --av=12
     AV_MAX
 };
 

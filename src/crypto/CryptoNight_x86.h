@@ -981,7 +981,7 @@ inline void cryptonight_penta_hash(const uint8_t *__restrict__ input, size_t siz
 }
 
 template<xmrig::Algo ALGO, bool SOFT_AES, int VARIANT>
-inline void cryptonight_decapenta_hash(const uint8_t *__restrict__ input, size_t size, uint8_t *__restrict__ output, cryptonight_ctx **__restrict__ ctx)
+inline void cryptonight_epta_hash(const uint8_t *__restrict__ input, size_t size, uint8_t *__restrict__ output, cryptonight_ctx **__restrict__ ctx)
 {
     constexpr size_t MASK       = xmrig::cn_select_mask<ALGO>();
     constexpr size_t ITERATIONS = xmrig::cn_select_iter<ALGO>();
